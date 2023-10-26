@@ -5,29 +5,28 @@ const Home = () => {
   const [data, setData] = useState({});
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
-  const [weather, setWeather] = useState(`Clear`)
+  const [weather, setWeather] = useState(`Clear`);
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${process.env.REACT_APP_API_KEY}`;
 
   const searchLocation = (event) => {
-    if (event.key === "Enter") {
-      axios
-        .get(url)
-        .then((res) => {
-          setData(res.data);
-          setError("");
-          setWeather(res.data.weather[0].main);
-          console.log(res, data);
-        })
-        .catch((err) => {
-          if (err.response && err.response.status === 404) {
-            setError("City not found");
-          } else {
-            setError("An error occurred");
-          }
-          console.log(err);
-        });
-    }
+    event.preventDefault();
+    axios
+      .get(url)
+      .then((res) => {
+        setData(res.data);
+        setError("");
+        setWeather(res.data.weather[0].main);
+        console.log(res, data);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 404) {
+          setError("City not found");
+        } else {
+          setError("An error occurred");
+        }
+        console.log(err);
+      });
   };
 
   return (
@@ -43,22 +42,23 @@ const Home = () => {
       <div className="container py-4">
         <h1 className="text-center">Weather App</h1>
         <div className="mx-5 text-center my-3">
-          <input
-            className="form-control form-control-lg shadow my-2"
-            value={location}
-            onChange={(event) => setLocation(event.target.value)}
-            onKeyDown={searchLocation}
-            type="text"
-            placeholder="Enter City Name"
-          />
-          {error && <p className="error">{error}</p>}
-          <form>
-            <button
-              type="submit"
-              className=" shadow btn btn-primary m-3 btn-lg"
-            >
-              Search
-            </button>
+          <form onSubmit={searchLocation}>
+            <div class="blur shadow input-group mb-5">
+              <input
+                type="text"
+                value={location}
+                onChange={(event) => setLocation(event.target.value)}
+                className="form-control mx-auto form-control-lg"
+                placeholder="Enter City Name"
+              />
+              <button
+                class="btn btn-primary btn-lg"
+                type="button"
+                id="button-addon1"
+              >
+                Search
+              </button>
+            </div>
           </form>
         </div>
 
@@ -78,8 +78,10 @@ const Home = () => {
               <div className="p-5 transparent col-md-6">
                 <h2>Humidity: {data.main.humidity}%</h2>
                 <h2>Visibility: {Math.round(data.visibility / 1000)} KM</h2>
-                <h3>Wind:</h3>
-                <p>Speed: {Math.round(data.wind.speed)} m/sec</p>
+                <div className="card wind">
+                  <h3>Wind:</h3>
+                  <p>Speed: {Math.round(data.wind.speed)} m/sec</p>
+                </div>
               </div>
             </div>
           </>

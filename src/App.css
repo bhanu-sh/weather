@@ -22,3 +22,30 @@ body{
   text-align: left !important;
   text-shadow: 1px 1px 3px black;
 }
+
+.wind{
+  background-color: rgba(255, 255, 255, 0);
+  color: white;
+  padding: 3%;
+  margin: 0 -3%;
+}
+
+.blur input, button{
+  background-color: rgba(255, 255, 255, 0) !important;
+  backdrop-filter: blur(1px);
+  border-color: #ffffff23 !important;
+}
+
+.blur button:hover, input:hover{
+  backdrop-filter: blur(5px);
+  border-color: black !important;
+}
+
+.blur input:focus{
+  border-color: rgb(0, 0, 0) !important;
+  backdrop-filter: blur(5px);
+}
+
+.blur button:active{
+  background-color: rgba(255, 255, 255, 0.432) !important;
+}
