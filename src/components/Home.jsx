@@ -56,7 +56,11 @@ const Home = () => {
                 value={location} // Bind input value to the location state
                 onChange={(e) => setLocation(e.target.value)} // Update the location state when input changes
               />
-              <button className="btn btn-primary btn-lg" type="submit" id="button-addon1">
+              <button
+                className="btn btn-primary btn-lg"
+                type="submit"
+                id="button-addon1"
+              >
                 Search
               </button>
             </div>
@@ -69,7 +73,11 @@ const Home = () => {
               <div className="p-5 transparent weather col-md-6">
                 <h1>{data.name}</h1>
                 <h2>Temp: {Math.round(data.main.temp)}° C</h2>
-                <img src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`} width={50} alt="" />
+                <img
+                  src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`}
+                  width={50}
+                  alt=""
+                />
                 <h4>{data.weather[0].main}</h4>
               </div>
               <div className="p-5 transparent col-md-6">
@@ -81,9 +89,13 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            
           </>
         ) : null}
+      </div>
+      <div className="footer text-center py-3">
+        <p>
+          Made by <a href="">Bhanu</a>
+        </p>
       </div>
     </div>
   );
