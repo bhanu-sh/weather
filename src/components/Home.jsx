@@ -43,7 +43,7 @@ const Home = () => {
         backgroundSize: "cover",
       }}
     >
-      <div className="container py-4">
+      <div className="container py-4 vh-100">
         <h1 className="text-center">Weather App</h1>
         <div className="mx-5 text-center my-3">
           <form onSubmit={searchLocation}>
@@ -91,11 +91,17 @@ const Home = () => {
             </div>
           </>
         ) : null}
-      </div>
-      <div className="footer text-center py-3">
-        <p>
-          Made by <a href="">Bhanu</a>
-        </p>
+        <div className="position-absolute bottom-0">
+          <p className="text-center text-white">
+            Made by{" "}
+            <a
+              className="text-white font-weight-bold"
+              href="https://github.com/bhanu-sh"
+            >
+              Bhanu
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
