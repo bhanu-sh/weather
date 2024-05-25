@@ -24,7 +24,6 @@ const Weather = () => {
 
   const getWeather = useCallback(async () => {
     try {
-      setLoading(true);
       const response = await axios.get(url);
       setData(response.data);
       setWeather(response.data.weather[0].main);
@@ -35,9 +34,16 @@ const Weather = () => {
     }
   }, [url]);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
+    setLoading(true);
     getWeather();
   }, [getWeather]);
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 60000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
 
   return (
     <div
