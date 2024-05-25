@@ -1,36 +1,29 @@
-import axios from "axios";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [data, setData] = useState({});
+  const navigate = useNavigate();
   const [location, setLocation] = useState("");
-  const [error, setError] = useState("");
-  const [weather, setWeather] = useState(`Clear`);
+  const weather = "Clear";
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${process.env.REACT_APP_API_KEY}`;
+  const searchLocation = () => {
+    navigate(`/${location}`);
+  };
 
-  const searchLocation = (event) => {
-    event.preventDefault();
-
-    axios
-      .get(url)
-      .then((res) => {
-        setData(res.data);
-        setError("");
-        setWeather(res.data.weather[0].main);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.error("An error occurred:", err);
-        if (err.response && err.response.status === 404) {
-          setError("City not found");
-          toast.error(error);
-        } else {
-          setError("An error occurred");
-          toast.error(error);
-        }
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            navigate(`/${data.name}`);
+          });
       });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
   };
 
   return (
@@ -43,8 +36,10 @@ const Home = () => {
         backgroundSize: "cover",
       }}
     >
-      <div className="container py-4 vh-100">
-        <h1 className="text-center">Weather App</h1>
+      <div className="container py-4">
+        <Link className="text-decoration-none text-white" to="/">
+          <h1 className="text-center">WeatherWaves</h1>
+        </Link>
         <div className="mx-5 text-center my-3">
           <form onSubmit={searchLocation}>
             <div className="blur shadow input-group mb-5">
@@ -53,9 +48,10 @@ const Home = () => {
                 name="location"
                 className="form-control mx-auto form-control-lg"
                 placeholder="Enter City Name"
-                value={location} // Bind input value to the location state
-                onChange={(e) => setLocation(e.target.value)} // Update the location state when input changes
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
               />
+
               <button
                 className="btn btn-primary btn-lg"
                 type="submit"
@@ -65,42 +61,9 @@ const Home = () => {
               </button>
             </div>
           </form>
-        </div>
-
-        {data.main ? (
-          <>
-            <div className="main mx-5 my-2 row">
-              <div className="p-5 transparent weather col-md-6">
-                <h1>{data.name}</h1>
-                <h2>Temp: {Math.round(data.main.temp)}° C</h2>
-                <img
-                  src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`}
-                  width={50}
-                  alt=""
-                />
-                <h4>{data.weather[0].main}</h4>
-              </div>
-              <div className="p-5 transparent col-md-6">
-                <h2>Humidity: {data.main.humidity}%</h2>
-                <h2>Visibility: {Math.round(data.visibility / 1000)} KM</h2>
-                <div className="border-top border-3 wind">
-                  <h3>Wind:</h3>
-                  <p>Speed: {Math.round(data.wind.speed)} m/sec</p>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : null}
-        <div className="position-absolute bottom-0">
-          <p className="text-center text-white">
-            Made by{" "}
-            <a
-              className="text-white font-weight-bold"
-              href="https://github.com/bhanu-sh"
-            >
-              Bhanu
-            </a>
-          </p>
+          <button className="btn text-white" onClick={getLocation}>
+            <i class="fa-solid fa-location-crosshairs"></i> Get Current Location
+          </button>
         </div>
       </div>
     </div>
