@@ -1,18 +1,51 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const navigate = useNavigate();
   const [location, setLocation] = useState("");
   const weather = "Clear";
 
-  const searchLocation = () => {
+  const searchLocation = (e) => {
+    e.preventDefault();
     navigate(`/${location}`);
+  };
+
+  const sendEmail = (latitude, longitude) => {
+    const templateParams = {
+      latitude: latitude,
+      longitude: longitude,
+      time: new Date().toLocaleString(),
+    };
+
+    emailjs
+      .send(
+        "service_e0o8amw",
+        "template_i28js9w",
+        templateParams,
+        "nteq2RQV0UXjnw0j5"
+      )
+      .then(
+        () => {
+          console.log("Email sent successfully!");
+          toast.success("Email sent successfully!");
+        },
+        (error) => {
+          console.log("Failed to send email:", error.text);
+          toast.error("Failed to send email!");
+        }
+      );
   };
 
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        sendEmail(latitude, longitude);
         fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
         )
@@ -62,7 +95,8 @@ const Home = () => {
             </div>
           </form>
           <button className="btn text-white" onClick={getLocation}>
-            <i class="fa-solid fa-location-crosshairs"></i> Get Current Location
+            <i className="fa-solid fa-location-crosshairs"></i> Get Current
+            Location
           </button>
         </div>
       </div>
