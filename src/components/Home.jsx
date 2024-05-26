@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
-import toast from "react-hot-toast";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -30,11 +29,9 @@ const Home = () => {
       .then(
         () => {
           console.log("Email sent successfully!");
-          toast.success("Email sent successfully!");
         },
         (error) => {
           console.log("Failed to send email:", error.text);
-          toast.error("Failed to send email!");
         }
       );
   };
