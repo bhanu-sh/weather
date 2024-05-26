@@ -9,7 +9,7 @@ export const ContactUs = () => {
     e.preventDefault();
 
     emailjs
-      .sendForm("service_e0o8amw", "template_i28js9w", form.current, {
+      .sendForm("service_e0o8amw", "template_re5ctdy", form.current, {
         publicKey: "nteq2RQV0UXjnw0j5",
       })
       .then(
@@ -20,19 +20,19 @@ export const ContactUs = () => {
         },
         (error) => {
           console.log("FAILED...", error.text);
-            toast.error("Failed to send email!");
+          toast.error("Failed to send email!");
         }
       );
   };
 
   return (
     <form ref={form} onSubmit={sendEmail}>
-      <label>Latitude</label>
-      <input type="text" name="latitude" />
-      <label>Longitude</label>
-      <input type="text" name="longitude" />
-      <label>Time</label>
-      <input type="text" name="time" />
+      <label>Name</label>
+      <input type="text" name="name" />
+      <label>Email</label>
+      <input type="text" name="email" />
+      <label>Message</label>
+      <textarea name="message" />
       <input type="submit" value="Send" />
     </form>
   );

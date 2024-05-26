@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import emailjs from "@emailjs/browser";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,37 +11,9 @@ const Home = () => {
     navigate(`/${location}`);
   };
 
-  const sendEmail = (latitude, longitude) => {
-    const templateParams = {
-      latitude: latitude,
-      longitude: longitude,
-      time: new Date().toLocaleString(),
-    };
-
-    emailjs
-      .send(
-        "service_e0o8amw",
-        "template_i28js9w",
-        templateParams,
-        "nteq2RQV0UXjnw0j5"
-      )
-      .then(
-        () => {
-          console.log("Email sent successfully!");
-        },
-        (error) => {
-          console.log("Failed to send email:", error.text);
-        }
-      );
-  };
-
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-
-        sendEmail(latitude, longitude);
         fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
         )
